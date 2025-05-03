@@ -14,7 +14,7 @@ interface HubSpotFormData {
   };
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://77.238.240.115:5085";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://77.238.240.115:5085";
 
 export function useHubSpot() {
   const submitForm = useMutation({
