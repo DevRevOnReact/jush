@@ -1,4 +1,3 @@
-import { Switch, Route } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,12 +6,12 @@ import { useHealth } from "@/hooks/useHealth";
 import { FormProvider } from "@/contexts/FormContext";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary";
 import { Loading } from "@/components/common/Loading";
-import { ROUTES } from "@/config/routes";
+import { useRouter } from "next/router";
 
 // Pages
 import NotFound from "@/pages/NotFound";
 import IntakeForm from "@/pages/IntakeForm";
-import Landing from "./pages/landing/page";
+import Landing from "@/pages/landing/page";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,18 +22,9 @@ const queryClient = new QueryClient({
   },
 });
 
-function Router() {
-  return (
-    <Switch>
-      <Route path={ROUTES.HOME} component={IntakeForm} />
-      <Route path={ROUTES.HOME} component={Landing} />
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
-
 function AppContent() {
   const { isLoading } = useHealth();
+  const router = useRouter();
 
   if (isLoading) {
     return (
@@ -44,7 +34,16 @@ function AppContent() {
     );
   }
 
-  return <Router />;
+  // Условное отображение страниц на основе роутинга
+  if (router.pathname === "/intakeForm") {
+    return <IntakeForm />;
+  }
+
+  if (router.pathname === "/") {
+    return <Landing />;
+  }
+
+  return <NotFound />;
 }
 
 function App() {

@@ -2,10 +2,8 @@
 import "@/global.css";
 import IntakeForm from "@/components/intake-form";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
-import { useHealth } from "@/hooks/useHealth";
 import { FormProvider as RHFFormProvider } from "react-hook-form";
 import { FormProvider } from "@/contexts/FormContext";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary";
