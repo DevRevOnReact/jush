@@ -1,0 +1,12 @@
+{
+  "name": "Junzi Tech Solutions",
+  "short_name": "Junzi",
+  "icons": [
+    {
+      "src": "favicon.ico"
+    }
+  ],
+  "theme_color": "#000",
+  "background_color": "#000",
+  "display": "standalone"
+}
