@@ -7,7 +7,7 @@ export default defineConfig({
     server: {
         proxy: {
             '/api': {
-                target: 'http://77.238.240.115:5085',
+                target: 'https://quartz.razrab.tech',
                 changeOrigin: true,
             },
         },
