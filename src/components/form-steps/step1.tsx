@@ -62,6 +62,11 @@ export default function Step1() {
           variant="primary"
           onClick={handleNextStep}
           disabled={!isFormValid}
+          eventName="form_step_completed"
+          eventData={{
+            step_number: 1,
+            step_name: "User Information"
+          }}
         >
           Next
         </NavigationButton>
