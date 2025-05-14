@@ -1,21 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 
-const HUBSPOT_API_URL = process.env.HUBSPOT_API_URL || "https://pback5-479789841998.us-central1.run.app";
-const HUBSPOT_API_KEY = process.env.HUBSPOT_API_KEY || "";
+const HUBSPOT_API_URL = process.env.HUBSPOT_API_URL;
+const HUBSPOT_API_KEY = process.env.HUBSPOT_API_KEY;
 
 export async function POST(request: NextRequest) {
   try {
+    if (!HUBSPOT_API_KEY) {
+      throw new Error('HubSpot API key is not configured');
+    }
+
     // Get the request body
     const body = await request.json();
     
     // Forward the request to the HubSpot API with authentication
-    const response = await axios.post(`${HUBSPOT_API_URL}/api/hubspot/submit`, body, {
+    const response = await axios.post(`${HUBSPOT_API_URL}/crm/v3/objects/contacts`, body, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${HUBSPOT_API_KEY}`,
-        'X-API-Key': HUBSPOT_API_KEY,
-        'Origin': process.env.NEXT_PUBLIC_API_URL || 'https://playful-boba-c760ca.netlify.app'
+        'Origin': process.env.NEXT_PUBLIC_API_URL,
+        'Referer': process.env.NEXT_PUBLIC_API_URL
       },
     });
     
@@ -32,8 +36,16 @@ export async function POST(request: NextRequest) {
         headers: error.response.headers
       });
       
+      // Try to extract more detailed error information
+      let errorMessage = 'Failed to submit form to HubSpot';
+      if (typeof error.response.data === 'string') {
+        errorMessage = error.response.data;
+      } else if (error.response.data && error.response.data.error) {
+        errorMessage = error.response.data.error;
+      }
+      
       return NextResponse.json(
-        { error: error.response.data },
+        { error: errorMessage },
         { status: error.response.status }
       );
     }
