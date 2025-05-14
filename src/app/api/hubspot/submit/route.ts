@@ -13,8 +13,21 @@ export async function POST(request: NextRequest) {
     // Get the request body
     const body = await request.json();
     
+    // Transform the fields array into a properties object for HubSpot
+    const properties = body.fields.reduce((acc: Record<string, string>, field: { name: string; value: string }) => {
+      if (field.value) { // Only include non-empty values
+        acc[field.name] = field.value;
+      }
+      return acc;
+    }, {});
+
+    // Prepare the HubSpot contact data
+    const hubspotData = {
+      properties: properties
+    };
+    
     // Forward the request to the HubSpot API with authentication
-    const response = await axios.post(`${HUBSPOT_API_URL}/crm/v3/objects/contacts`, body, {
+    const response = await axios.post(`${HUBSPOT_API_URL}/crm/v3/objects/contacts`, hubspotData, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${HUBSPOT_API_KEY}`,
@@ -42,6 +55,8 @@ export async function POST(request: NextRequest) {
         errorMessage = error.response.data;
       } else if (error.response.data && error.response.data.error) {
         errorMessage = error.response.data.error;
+      } else if (error.response.data && error.response.data.message) {
+        errorMessage = error.response.data.message;
       }
       
       return NextResponse.json(
