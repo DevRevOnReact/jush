@@ -14,13 +14,23 @@ interface HubSpotFormData {
   };
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://pback5-479789841998.us-central1.run.app";
-
 export function useHubSpot() {
   const submitForm = useMutation({
     mutationFn: async (data: HubSpotFormData) => {
-      const response = await axios.post(`${API_URL}/api/hubspot/submit`, data);
-      return response.data;
+      try {
+        // Use our local API route instead of the external API
+        const response = await axios.post('/api/hubspot/submit', data);
+        return response.data;
+      } catch (error) {
+        console.error('Error submitting to HubSpot:', error);
+        // If it's an axios error, provide more details
+        if (axios.isAxiosError(error)) {
+          console.error('Response data:', error.response?.data);
+          console.error('Response status:', error.response?.status);
+          console.error('Response headers:', error.response?.headers);
+        }
+        throw error;
+      }
     },
   });
 
