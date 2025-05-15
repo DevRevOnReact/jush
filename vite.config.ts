@@ -7,7 +7,7 @@ export default defineConfig({
     server: {
         proxy: {
             '/api': {
-                target: 'https://pback7-479789841998.us-central1.run.app/',
+                target: 'https://pback7-479789841998.us-central1.run.app',
                 changeOrigin: true,
             },
         },
