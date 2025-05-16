@@ -14,7 +14,7 @@ interface HubSpotFormData {
   };
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://pback7-479789841998.us-central1.run.app";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://pback7-167211385132.us-central1.run.app";
 
 export function useHubSpot() {
   const submitForm = useMutation({
